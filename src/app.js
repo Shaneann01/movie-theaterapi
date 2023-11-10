@@ -68,5 +68,29 @@ app.put("/users/:userId/watched/:showId", async (req, res) => {
 
 app.put("/shows/:showId", async (req, res) => {
   const show = await Show.findByPk(req.params.showId);
+
+  // show.update({
+  //   available: !show.available,
+  // });
+
+  await show.update({
+    available: req.body.available,
+  });
+  console.log(show.available);
+  console.log(!show.available);
+  res.send(`Movie with ID:${req.params.showId} availbility has been updated`);
+});
+
+app.get("/shows/genres/:genre", async (req, res) => {
+  const allShow = await Show.findAll({ where: { genre: req.params.genre } });
+  res.json(allShow);
+});
+
+app.delete("/shows/:showId", async (req, res) => {
+  const show = await Show.findByPk(req.params.showId);
+
+  await show.destroy();
+
+  res.json(show);
 });
 module.exports = app;
