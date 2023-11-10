@@ -49,4 +49,24 @@ app.get("/shows/:showId/users", async (req, res) => {
   });
   res.json(allShows);
 });
+
+//CRUD - with PUT and later Delete
+app.use(express.json());
+app.use(express.urlencoded());
+
+//Associate user with a show they watched:
+app.put("/users/:userId/watched/:showId", async (req, res) => {
+  const user = await User.findByPk(req.params.userId);
+  const show = await Show.findByPk(req.params.showId);
+
+  await user.addShow(show);
+
+  res.send(`User has been updated with recently watched`);
+});
+
+//Update the available property of a show
+
+app.put("/shows/:showId", async (req, res) => {
+  const show = await Show.findByPk(req.params.showId);
+});
 module.exports = app;
